@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ottimizzazione tagli</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <h1>Ottimizzazione taglio pannelli</h1>
+  <p class="sub">Inserisci parametri e infissi, poi premi <b>Calcola</b>. Misure in cm, al massimo 1 decimale.</p>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Parametri</h2>
+    <div class="params">
+      <label>Lunghezza pannello (cm)<input id="p_len" type="number" step="0.1" min="0.1" value="650"></label>
+      <label>Kerf (cm)<input id="p_kerf" type="number" step="0.1" min="0" value="0.3"></label>
+      <label>Posti di appoggio<input id="p_slots" type="number" step="1" min="0" value="2"></label>
+      <label>Peso cambio misura (cm)<input id="p_weight" type="number" step="0.1" min="0" value="20"></label>
+      <label class="wide" title="Decrescente: si tagliano prima le misure più lunghe (regola rigida, può costare sfrido). Preferito: prima il minimo sfrido, poi, a parità, l'ordine decrescente. Libero: decide solo lo sfrido.">Ordine delle misure
+        <select id="p_order"><option value="decrescente">decrescente (rigido)</option><option value="preferito" selected>decrescente se non costa sfrido</option><option value="libero">libero</option></select></label>
+    </div>
+    <details class="adv" open>
+      <summary>Margini e zone non tagliabili</summary>
+      <p class="muted small">Riducono la lunghezza utilizzabile del pannello:
+        <b>capacità utile = lunghezza pannello − margini − zone non tagliabili</b>.
+        Esempio: barra 650, margini 15, zone 0 → il calcolo usa 635 cm.</p>
+      <div class="params">
+        <label title="Esempio: 2 cm di rifilatura in testa + 3 cm presi dalla morsa in coda = 5.">Margini alle estremità, totale (cm)<input id="p_marg" type="number" step="0.1" min="0" value="15"></label>
+        <label title="Esempio: un difetto o una giunzione a metà pannello lunga 10 cm = 10.">Zone non tagliabili, totale (cm)<input id="p_zone" type="number" step="0.1" min="0" value="0"></label>
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <div class="row-head">
+      <h2>Infissi <span id="count" class="muted" data-max="{{ max_infissi }}" data-max-pezzi="{{ max_pezzi }}"></span></h2>
+      <div class="actions">
+        <button type="button" id="btn-import" class="ghost">Carica JSON</button>
+        <button type="button" id="btn-export" class="ghost">Esporta JSON</button>
+        <input type="file" id="file" accept=".json,application/json" hidden>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="tbl">
+        <thead>
+          <tr><th>#</th><th>ID infisso</th><th>Misura 1 (cm)</th><th>Q.tà 1</th><th>Misura 2 (cm)</th><th>Q.tà 2</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <button type="button" id="btn-add" class="ghost">+ Aggiungi infisso</button>
+  </section>
+
+  <section class="card run">
+    <label>Livello di calcolo
+      <select id="level">
+        {% for l in livelli %}<option value="{{ l }}" {% if l == 'standard' %}selected{% endif %}>{{ l }}</option>{% endfor %}
+      </select>
+    </label>
+    <span class="muted hint">rapido: secondi · standard: 1–2 min · esteso: fino a ~20 min</span>
+    <button type="button" id="btn-run" class="primary">Calcola</button>
+  </section>
+
+  <section id="errors" class="card error" hidden></section>
+
+  <section id="progress" class="card" hidden>
+    <div class="bar"><div id="bar-fill"></div></div>
+    <p id="progress-text" class="muted"></p>
+  </section>
+
+  <section id="results" hidden></section>
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* Stile del form; colori e stile del piano sono in report.css */
+header, main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+header { padding-top: 24px; }
+.sub { color: var(--muted); }
+.params { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
+input, select { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 6px 8px; min-width: 0; }
+input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+button { font: inherit; border-radius: 6px; padding: 7px 14px; cursor: pointer; border: 1px solid var(--border); }
+button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+button.primary:disabled { opacity: .5; cursor: wait; }
+button.ghost { background: transparent; color: var(--text); }
+button.del { background: transparent; color: var(--muted); border: none; padding: 4px 8px; }
+.row-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.actions { display: flex; gap: 8px; }
+.table-wrap { overflow-x: auto; margin-bottom: 10px; }
+#tbl th, #tbl td { white-space: nowrap; }
+td input { width: 100%; min-width: 70px; }
+.run { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.run .hint { flex: 1; font-size: .85rem; padding-bottom: 8px; }
+.error { background: var(--error-bg); color: var(--error-text); border-color: transparent; }
+.error ul { margin: 0; padding-left: 20px; }
+.bar { height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden; border: 1px solid var(--border); }
+#bar-fill { height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+.adv { margin-top: 14px; }
+.adv summary { cursor: pointer; color: var(--muted); font-size: .9rem; }
+.adv .params { margin-top: 8px; }
+.params label.wide { grid-column: span 2; }
+@media (max-width: 420px) { .params label.wide { grid-column: auto; } }
+.downloads { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.downloads a { color: var(--text); text-decoration: none; border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: .9rem; }
+.downloads a:hover { border-color: var(--accent); }
